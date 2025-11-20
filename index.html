@@ -1,376 +1,107 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>给 __NAME__ 的九周年惊喜 ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>九周年快乐 ❤️</title>
 <style>
-  :root{
-    --bg:#0b1020;
-    --card:#0f1724;
-    --accent:#ff4d6d; /* 主色，可修改 */
-    --muted:#9aa4b2;
-  }
-  html,body{height:100%;margin:0;font-family: "Helvetica Neue",Helvetica,Arial,"PingFang SC", "Noto Sans SC", "Microsoft Yahei", sans-serif;background: radial-gradient(ellipse at 10% 10%, #071025 0%, var(--bg) 40%), linear-gradient(180deg, rgba(6,8,18,0.6), rgba(0,0,0,0.9)); color: #fff;}
-  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;}
-  .card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:18px;box-shadow:0 10px 40px rgba(2,6,23,0.6);overflow:hidden;position:relative;padding:28px;}
-  .top{
-    display:flex;gap:20px;align-items:center;
-  }
-  .heart-btn{
-    width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),#ff86a0);box-shadow:0 8px 30px rgba(255,77,109,0.18), inset 0 -6px 18px rgba(0,0,0,0.15);cursor:pointer;flex-shrink:0;transition:transform .18s ease;
-  }
-  .heart-btn:active{transform:scale(.96);}
-  .heart-svg{width:46px;height:46px;filter:drop-shadow(0 6px 12px rgba(255,77,109,0.25));}
-  .title{
-    font-size:22px;font-weight:700;line-height:1.1;
-  }
-  .subtitle{color:var(--muted);margin-top:6px;font-size:14px;}
-  .message-area{margin-top:20px;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:18px;border-radius:12px;min-height:160px;display:flex;align-items:center;justify-content:center;position:relative;}
-  .message-text{font-size:20px;text-align:center;max-width:760px;line-height:1.6;}
-  .small-cta{margin-top:16px;display:flex;gap:12px;justify-content:center;}
-  .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 16px;border-radius:10px;color:#fff;font-weight:600;backdrop-filter: blur(4px);cursor:pointer;}
-  .btn.primary{background:linear-gradient(90deg,var(--accent),#ff86a0);border:0;color:#081025;box-shadow:0 8px 30px rgba(255,77,109,0.12);}
-  footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px;}
-  /* CONFETTI canvas */
-  #confetti{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;z-index:8;}
-  /* heart particle layer */
-  #particle-layer{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;z-index:6;}
-  /* center heart animation */
-  .center-heart{
-    position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);z-index:7;pointer-events:none;opacity:0;transition:opacity .6s ease;
-  }
-  .center-heart.show{opacity:1;animation:pop 900ms cubic-bezier(.2,.9,.2,1) forwards;}
-  @keyframes pop{
-    0%{transform:translate(-50%,-50%) scale(.5) rotate(-6deg) translateZ(0);}
-    60%{transform:translate(-50%,-52%) scale(1.08) rotate(4deg) translateZ(0);}
-    100%{transform:translate(-50%,-50%) scale(1) rotate(0) translateZ(0);}
-  }
-  /* typed text caret */
-  .typed{border-right:2px solid rgba(255,255,255,0.85);padding-right:4px;animation:blink .9s steps(1) infinite;}
-  @keyframes blink{50%{border-color:transparent}}
-  /* responsive */
-  @media (max-width:640px){
-    .card{padding:16px;}
-    .heart-btn{width:76px;height:76px}
-    .title{font-size:18px}
-    .message-text{font-size:18px}
-  }
+    body {
+        margin: 0;
+        background: #ffdde1;
+        overflow: hidden;
+        font-family: "微软雅黑", sans-serif;
+        text-align: center;
+    }
+
+    #heart {
+        font-size: 80px;
+        cursor: pointer;
+        animation: beat 1.2s infinite;
+        margin-top: 40vh;
+    }
+
+    @keyframes beat {
+        0% { transform: scale(1); }
+        30% { transform: scale(1.3); }
+        60% { transform: scale(1); }
+    }
+
+    #text-box {
+        position: absolute;
+        width: 100%;
+        top: 10vh;
+        font-size: 28px;
+        color: #d00000;
+    }
 </style>
 </head>
+
 <body>
-<div class="wrap">
-  <div class="card" id="card">
-    <canvas id="confetti"></canvas>
-    <canvas id="particle-layer"></canvas>
 
-    <div class="top">
-      <div class="heart-btn" id="heartBtn" title="点我！送你一颗心">
-        <!-- heart icon -->
-        <svg class="heart-svg" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 21s-7-4.35-9.39-6.66C.89 12.86.7 8.58 3.6 6.12 6.5 3.66 10.41 4.1 12 6.02 13.59 4.1 17.5 3.66 20.4 6.12c2.9 2.46 2.7 6.74.99 8.22C19 16.65 12 21 12 21z"/>
-        </svg>
-      </div>
+<div id="text-box">❤️ 亲爱的宝贝，点一下爱心吧 ❤️</div>
+<div id="heart">❤️</div>
 
-      <div style="flex:1;">
-        <div class="title" id="pageTitle">给 <span id="namePlace">她</span> 的九周年惊喜</div>
-        <div class="subtitle">点开这个爱心，看见你的惊喜吧 ✨</div>
-      </div>
-    </div>
-
-    <div class="message-area" id="messageArea">
-      <div class="message-text" id="messageText">🎉 <span id="typedInner"></span></div>
-    </div>
-
-    <div class="small-cta">
-      <button class="btn primary" id="replayBtn">再看一次 ❤️</button>
-      <button class="btn" id="playAudioBtn">播放/暂停 背景旋律</button>
-      <button class="btn" id="customizeBtn">编辑赠言（仅本地）</button>
-    </div>
-
-    <footer>九周年快乐 — 你的小惊喜由网页生成 · 可保存为书签或分享到微信（发送链接或文件）</footer>
-
-    <!-- center heart for big animation -->
-    <div class="center-heart" id="centerHeart">
-      <svg width="240" height="240" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stop-color="#ff9aa8"/>
-            <stop offset="1" stop-color="#ff4d6d"/>
-          </linearGradient>
-        </defs>
-        <path d="M12 21s-7-4.35-9.39-6.66C.89 12.86.7 8.58 3.6 6.12 6.5 3.66 10.41 4.1 12 6.02 13.59 4.1 17.5 3.66 20.4 6.12c2.9 2.46 2.7 6.74.99 8.22C19 16.65 12 21 12 21z"
-              fill="url(#g1)" transform="translate(0,0) scale(1.6) translate(-6,-5)"/>
-      </svg>
-    </div>
-  </div>
-</div>
+<!-- 音乐 -->
+<audio id="bgm" src="https://cdn.pixabay.com/audio/2024/01/08/audio_65e6872dac.mp3" loop></audio>
 
 <script>
-/* ========== 可自定义区域（把这里的值改成你想要的） ========== */
-const SETTINGS = {
-  girlfriendName: "亲爱的",          // 页头名字位置，会显示在标题里
-  anniversaryYears: 9,               // 周年数
-  messages: [
-    "九年时光，感谢有你一路相伴。",
-    "从青涩到成熟，我们一起成长。",
-    "愿以后每一个日常，都被温柔包围。",
-    "我爱你，直到永远。"
-  ],
-  primaryColor: "#ff4d6d",           // 主要风格色（与 CSS 变量同步）
-  confettiColors: ["#ff9aa8","#ff4d6d","#ffd166","#8bd3c7","#caa1ff"],
-  autoplayMelody: true               // 打开后尝试自动（移动端通常需要用户交互）
-}
-/* ========== end 可自定义区域 ========== */
+// 你想显示的句子（自己可以改）
+const messages = [
+    "宝贝，今天是我们的第九周年 ❤️",
+    "九年很长，但和你在一起的每一天都很短。",
+    "谢谢你陪我走过这么长的时间。",
+    "未来我也想继续和你一起，走更远的路。",
+    "愿我们每天都像第一次牵手那样心动。",
+    "我爱你 ❤️ forever."
+];
 
-/* 将JS设置同步到CSS变量 */
-document.documentElement.style.setProperty('--accent', SETTINGS.primaryColor);
+let index = 0;
 
-/* DOM references */
-const namePlace = document.getElementById('namePlace');
-const typedInner = document.getElementById('typedInner');
-const heartBtn = document.getElementById('heartBtn');
-const centerHeart = document.getElementById('centerHeart');
-const replayBtn = document.getElementById('replayBtn');
-const playAudioBtn = document.getElementById('playAudioBtn');
-const customizeBtn = document.getElementById('customizeBtn');
+document.getElementById("heart").addEventListener("click", () => {
 
-namePlace.textContent = SETTINGS.girlfriendName;
+    // 自动播放音乐（手机限制：需要第一次点击触发）
+    const bgm = document.getElementById("bgm");
+    bgm.play().catch(() => {}); 
 
-/* Typed message: combine messages into one paragraph with pauses */
-const fullMessage = SETTINGS.messages.join('\\n\\n');
+    // 显示下一句
+    document.getElementById("text-box").innerText = messages[index];
 
-/* Simple typing effect (supports \n) */
-function typeText(text, el, speed=30){
-  el.textContent = "";
-  let i = 0;
-  let idxLine = 0;
-  return new Promise((resolve)=>{
-    function step(){
-      if(i >= text.length){ resolve(); return; }
-      const ch = text[i++];
-      if(ch === "\\n"){ el.innerHTML += "<br/>"; }
-      else { el.innerHTML += ch; }
-      // scroll into view if long
-      i%50===0 && (window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}));
-      setTimeout(step, speed + Math.random()*20);
+    index++;
+    if (index >= messages.length) index = messages.length - 1;
+
+    // 点击爱心时爆出小心心
+    createHeartExplosion();
+});
+
+// 小爱心爆炸动画
+function createHeartExplosion() {
+    for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.style.position = "fixed";
+        heart.style.left = (window.innerWidth / 2) + "px";
+        heart.style.top = (window.innerHeight / 2) + "px";
+        heart.style.fontSize = "18px";
+        heart.style.opacity = 1;
+        document.body.appendChild(heart);
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 80 + Math.random() * 40;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        heart.animate([
+            { transform: "translate(0, 0)", opacity: 1 },
+            { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
+        ], {
+            duration: 1500,
+            easing: "ease-out"
+        });
+
+        setTimeout(() => heart.remove(), 1500);
     }
-    step();
-  });
 }
-
-/* Confetti engine (canvas) */
-const confettiCanvas = document.getElementById('confetti');
-const confettiCtx = confettiCanvas.getContext('2d');
-const particleCanvas = document.getElementById('particle-layer');
-const particleCtx = particleCanvas.getContext('2d');
-let W=0,H=0;
-function resize(){
-  W = confettiCanvas.width = particleCanvas.width = innerWidth * devicePixelRatio;
-  H = confettiCanvas.height = particleCanvas.height = innerHeight * devicePixelRatio;
-  confettiCanvas.style.width = innerWidth + 'px';
-  confettiCanvas.style.height = innerHeight + 'px';
-  particleCanvas.style.width = innerWidth + 'px';
-  particleCanvas.style.height = innerHeight + 'px';
-}
-addEventListener('resize', ()=>{ resize() });
-resize();
-
-/* confetti particles */
-let confettiPieces = [];
-function spawnConfetti(count=60, originX=innerWidth/2, originY=innerHeight/3){
-  const cols = SETTINGS.confettiColors;
-  for(let i=0;i<count;i++){
-    confettiPieces.push({
-      x: originX * devicePixelRatio + (Math.random()-0.5)*400,
-      y: originY * devicePixelRatio + (Math.random()-0.5)*200,
-      vx: (Math.random()-0.5)*12,
-      vy: -8 - Math.random()*6,
-      r: 6 + Math.random()*8,
-      color: cols[Math.floor(Math.random()*cols.length)],
-      rot: Math.random()*360,
-      vr: (Math.random()-0.5)*12
-    });
-  }
-}
-
-let lastTime = performance.now();
-function confettiLoop(t){
-  const dt = (t - lastTime) / 1000;
-  lastTime = t;
-  confettiCtx.clearRect(0,0,W,H);
-  // gravity / update
-  for(let i=confettiPieces.length-1;i>=0;i--){
-    const p = confettiPieces[i];
-    p.vy += 18 * dt; // gravity
-    p.x += p.vx * dt * 60;
-    p.y += p.vy * dt * 60;
-    p.rot += p.vr * dt * 60;
-    confettiCtx.save();
-    confettiCtx.translate(p.x,p.y);
-    confettiCtx.rotate(p.rot * Math.PI/180);
-    confettiCtx.fillStyle = p.color;
-    confettiCtx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
-    confettiCtx.restore();
-    if(p.y > H + 200) confettiPieces.splice(i,1);
-  }
-  requestAnimationFrame(confettiLoop);
-}
-requestAnimationFrame(confettiLoop);
-
-/* particle (heart sparkle) */
-let particles = [];
-function spawnHeartParticles(count=28, x=innerWidth/2, y=innerHeight/2){
-  for(let i=0;i<count;i++){
-    const ang = Math.random()*Math.PI*2;
-    const sp = {
-      x: x*devicePixelRatio,
-      y: y*devicePixelRatio,
-      vx: Math.cos(ang)*(20+Math.random()*120),
-      vy: Math.sin(ang)*(20+Math.random()*120),
-      life: 0,
-      maxLife: 0.7 + Math.random()*0.6,
-      size: 3+Math.random()*6,
-      hue: SETTINGS.confettiColors[Math.floor(Math.random()*SETTINGS.confettiColors.length)]
-    };
-    particles.push(sp);
-  }
-}
-
-function particleLoop(t){
-  const dt = (t - lastTime) / 1000;
-  particleCtx.clearRect(0,0,W,H);
-  for(let i=particles.length-1;i>=0;i--){
-    const p = particles[i];
-    p.life += dt;
-    if(p.life > p.maxLife){ particles.splice(i,1); continue; }
-    const k = 1 - p.life / p.maxLife;
-    p.x += p.vx * dt * 6;
-    p.y += p.vy * dt * 6 + 40*dt;
-    particleCtx.globalAlpha = k;
-    particleCtx.beginPath();
-    particleCtx.arc(p.x, p.y, p.size * k, 0, Math.PI*2);
-    particleCtx.fillStyle = p.hue;
-    particleCtx.fill();
-  }
-  requestAnimationFrame(particleLoop);
-}
-requestAnimationFrame(particleLoop);
-
-/* WebAudio simple melody generator (no external files) */
-let audioCtx = null;
-let masterGain = null;
-let playing = false;
-function initAudio(){
-  if(audioCtx) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  masterGain = audioCtx.createGain();
-  masterGain.gain.value = 0.12;
-  masterGain.connect(audioCtx.destination);
-}
-
-/* play a short melody (arpeggio-ish) */
-function playMelody(){
-  initAudio();
-  if(playing) return;
-  playing = true;
-  const notes = [440, 523.25, 659.25, 880, 659.25, 523.25]; // A4, C5, E5, A5 ...
-  const now = audioCtx.currentTime;
-  for(let i=0;i<notes.length;i++){
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type = 'sine';
-    o.frequency.value = notes[i];
-    g.gain.value = 0;
-    o.connect(g);
-    g.connect(masterGain);
-    o.start(now + i*0.18);
-    g.gain.setValueAtTime(0, now + i*0.18);
-    g.gain.linearRampToValueAtTime(1.0, now + i*0.18 + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.001, now + i*0.18 + 0.4);
-    o.stop(now + i*0.18 + 0.45);
-  }
-  // schedule fade out after melody
-  setTimeout(()=>{ playing=false; }, notes.length*180 + 600);
-}
-
-/* toggle play/pause: since we generate short melodies, playMelody will just play one sequence */
-playAudioBtn.addEventListener('click', ()=>{
-  // mobile browsers require resume on user gesture
-  initAudio();
-  if(audioCtx.state === 'suspended') audioCtx.resume();
-  playMelody();
-});
-
-/* main reveal routine */
-async function revealSequence(){
-  // visual
-  centerHeart.classList.remove('show');
-  // quick pulse on heart button
-  heartBtn.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}], {duration:420, easing:'cubic-bezier(.2,.9,.2,1')});
-  // show big heart
-  centerHeart.classList.add('show');
-  // spawn confetti and particles
-  spawnConfetti(80, innerWidth/2, innerHeight/2);
-  spawnHeartParticles(42, innerWidth/2, innerHeight/2);
-  // play melody
-  initAudio();
-  if(audioCtx.state === 'suspended') await audioCtx.resume();
-  playMelody();
-
-  // typing effect for the lines
-  typedInner.innerHTML = '';
-  await typeText(`To ${SETTINGS.girlfriendName} — 第 ${SETTINGS.anniversaryYears} 个我们在一起的日子\n\n`, typedInner, 30);
-  for(const line of SETTINGS.messages){
-    await typeText(line + "\n\n", typedInner, 32);
-    // small pause and gentle confetti for each line
-    spawnConfetti(28 + Math.floor(Math.random()*40), innerWidth/2, innerHeight/2);
-    await new Promise(r=>setTimeout(r, 520));
-  }
-  // final sparkle
-  spawnConfetti(120, innerWidth/2, innerHeight/2.5);
-}
-
-/* bind buttons */
-heartBtn.addEventListener('click', async ()=>{
-  // ensure audio allowed
-  initAudio();
-  if(audioCtx && audioCtx.state === 'suspended') try{ await audioCtx.resume(); }catch(e){}
-  await revealSequence();
-});
-
-replayBtn.addEventListener('click', async ()=>{
-  await revealSequence();
-});
-
-customizeBtn.addEventListener('click', ()=>{
-  const newName = prompt("设置称呼（会显示在标题和开头）", SETTINGS.girlfriendName);
-  if(newName!==null){ SETTINGS.girlfriendName = newName; namePlace.textContent = newName; }
-  const years = prompt("设置周年数（数字）", ""+SETTINGS.anniversaryYears);
-  if(years!==null && !isNaN(parseInt(years))){ SETTINGS.anniversaryYears = parseInt(years); }
-  const newMsg = prompt("输入你想要的赠言（用 || 分隔为多行）", SETTINGS.messages.join(" || "));
-  if(newMsg!==null){ SETTINGS.messages = newMsg.split(" || ").map(s=>s.trim()).filter(Boolean); }
-  alert("已本地更新设置（仅当前页面有效）。保存文件后再分享链接可保留更改。");
-});
-
-/* small UX: try auto-play once if allowed */
-window.addEventListener('load', async ()=>{
-  if(SETTINGS.autoplayMelody){
-    try{
-      initAudio();
-      if(audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
-      // try a very short tone to warm audio, if allowed by browser
-      playMelody();
-    }catch(e){}
-  }
-});
-
-/* accessibility: allow keyboard activation */
-heartBtn.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); heartBtn.click(); } });
-
-/* Small helper: if user pasted this file to a static host, the title will include the name */
-document.title = `给 ${SETTINGS.girlfriendName} 的${SETTINGS.anniversaryYears}周年惊喜 ❤️`;
-
 </script>
+
 </body>
 </html>
